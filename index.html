@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Феномен непризнанных государств</title>
+<style>
+:root{
+  --navy:#10263f; --blue:#1d3c5b; --ink:#172536; --muted:#627286;
+  --paper:#f4f6f8; --white:#fff; --gold:#c49a55; --line:#dce3e9;
+  --red:#a94b4b; --green:#397a68;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;font-family:Inter,Segoe UI,Arial,sans-serif;background:#0b1725;color:var(--ink)}
+body{overflow:hidden}
+.deck{height:100%;width:100%;position:relative}
+.slide{
+ display:none; position:absolute; inset:0; overflow:auto;
+ padding:clamp(28px,5vw,76px) clamp(24px,7vw,108px) 82px;
+ background:linear-gradient(135deg,#fbfcfd 0%,#eef2f5 100%);
+}
+.slide.active{display:flex;flex-direction:column;animation:appear .35s ease}
+@keyframes appear{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slide.dark{background:radial-gradient(circle at 82% 18%,#294967 0,#142e49 35%,#0d2035 78%);color:#fff}
+.kicker{font-size:clamp(11px,1vw,14px);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:18px}
+h1{font-size:clamp(38px,5.5vw,76px);line-height:1.04;letter-spacing:-.04em;margin:0 0 22px;max-width:1000px}
+h2{font-size:clamp(30px,3.6vw,48px);line-height:1.08;letter-spacing:-.03em;margin:0 0 28px;color:var(--navy)}
+.dark h2{color:#fff}
+h3{font-size:clamp(17px,1.6vw,22px);margin:0 0 10px;color:var(--navy)}
+.dark h3{color:#fff}
+p{font-size:clamp(15px,1.35vw,19px);line-height:1.55;margin:0 0 12px;color:#34465a}
+.dark p{color:#d9e3ed}
+.subtitle{font-size:clamp(18px,2vw,27px);line-height:1.45;color:#dce6ef;max-width:850px}
+.lead{font-size:clamp(18px,1.8vw,25px);line-height:1.45;color:#334b63;max-width:1050px}
+.dark .lead{color:#e4edf5}
+.gold{color:var(--gold)}
+.rule{height:3px;width:76px;background:var(--gold);margin:22px 0 28px;border-radius:9px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:18px;padding:22px 24px;box-shadow:0 8px 24px rgba(19,42,65,.045)}
+.dark .card{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14);box-shadow:none}
+.card p{font-size:clamp(14px,1.15vw,17px);margin:0}
+.card h3{display:flex;align-items:center;gap:10px}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#e8edf2;color:var(--blue);font-weight:800;font-size:14px;flex:none}
+.dark .num{background:rgba(255,255,255,.13);color:#f1c981}
+ul{padding-left:22px;margin:6px 0 0}
+li{font-size:clamp(14px,1.2vw,17px);line-height:1.48;margin:7px 0;color:#34465a}
+.dark li{color:#d9e3ed}
+.callout{border-left:4px solid var(--gold);padding:14px 18px;background:#f0f3f6;border-radius:0 12px 12px 0;margin-top:18px}
+.callout p{margin:0;font-weight:600;color:#20364d}
+.dark .callout{background:rgba(255,255,255,.09)}
+.dark .callout p{color:#fff}
+.pill{display:inline-block;border:1px solid #d7e0e8;background:#fff;border-radius:99px;padding:7px 12px;font-size:13px;color:#36506a;margin:4px 5px 0 0}
+.dark .pill{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#e5edf5}
+.mapbox{border:1px solid rgba(255,255,255,.18);border-radius:22px;background:rgba(255,255,255,.06);padding:20px;margin-top:28px}
+.world{width:100%;height:auto;display:block;max-height:320px}
+.region{fill:#6f879e;stroke:#d5e0e9;stroke-width:1.2;opacity:.8}
+.hot{fill:#c49a55;stroke:#fff;stroke-width:1.4}
+.maplabel{font-size:13px;fill:#fff;font-weight:700}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;font-size:clamp(12px,1.1vw,15px)}
+th{background:#173653;color:#fff;text-align:left;padding:13px 14px}
+td{padding:12px 14px;border-bottom:1px solid #e5eaef;vertical-align:top;color:#33465a;line-height:1.4}
+tr:last-child td{border-bottom:0}
+.small{font-size:13px;color:var(--muted)}
+.dark .small{color:#bac9d7}
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+.step{border-top:3px solid var(--gold);padding:16px 16px 18px;background:#fff;border-radius:0 0 14px 14px}
+.step strong{display:block;color:var(--navy);font-size:17px;margin-bottom:8px}
+.step p{font-size:14px;margin:0}
+.quote{font-size:clamp(22px,2.6vw,36px);line-height:1.3;max-width:1000px;font-weight:650;color:#fff;letter-spacing:-.02em}
+.footer{position:fixed;left:clamp(24px,7vw,108px);right:clamp(24px,7vw,108px);bottom:22px;display:flex;align-items:center;gap:16px;z-index:5;color:#718195;font-size:12px;pointer-events:none}
+.dark~.footer{color:#d0dbe5}
+.progress{height:3px;background:#dbe2e8;flex:1;border-radius:5px;overflow:hidden}
+.progress span{display:block;height:100%;width:10%;background:var(--gold);transition:width .25s}
+.controls{position:fixed;right:24px;bottom:14px;display:flex;gap:8px;z-index:10}
+button{border:1px solid #cbd5df;background:#fff;color:#18324c;border-radius:50%;width:42px;height:42px;font-size:20px;cursor:pointer;box-shadow:0 4px 14px #081a2a22}
+button:hover{background:#f0f4f7}
+.counter{min-width:42px;text-align:center;padding-top:13px;font-size:12px;color:#718195}
+.notes{margin-top:auto;padding-top:22px}
+details{margin-top:18px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.72);padding:12px 16px}
+details summary{cursor:pointer;color:#38536d;font-weight:700;font-size:14px}
+details p{font-size:14px;margin:12px 0 2px;color:#53677b}
+.dark details{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18)}
+.dark details summary{color:#e8c98f}
+.dark details p{color:#d8e2eb}
+.source{font-size:12px;color:#75869a;margin-top:16px}
+.dark .source{color:#b7c5d2}
+@media(max-width:760px){
+ .slide{padding:28px 22px 90px}
+ .grid,.grid.three,.timeline{grid-template-columns:1fr}
+ .footer{left:22px;right:22px;bottom:16px}
+ .controls{right:18px;bottom:8px}
+ .card{padding:17px}
+ table{font-size:11px}
+ th,td{padding:9px 8px}
+}
+@media print{
+ html,body{overflow:visible;background:#fff}
+ .deck{height:auto}
+ .slide{display:flex!important;position:relative;inset:auto;min-height:100vh;page-break-after:always;overflow:visible}
+ .controls,.footer{display:none}
+ details{display:block}
+ details[open] p{display:block}
+}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<section class="slide dark active">
+ <div class="kicker">Доклад · Международные отношения</div>
+ <h1>Феномен<br><span class="gold">непризнанных государств</span><br>в современной системе международных отношений</h1>
+ <div class="rule"></div>
+ <p class="subtitle">Политико-правовой статус, критерии де-факто независимости и кейс-стади</p>
+ <div style="margin-top:28px">
+  <span class="pill">Суверенитет</span><span class="pill">Самоопределение</span><span class="pill">Международное признание</span><span class="pill">Геополитика</span>
+ </div>
+ <div class="mapbox">
+  <svg class="world" viewBox="0 0 900 300" role="img" aria-label="Схематическая карта мира с выделенными регионами">
+   <path class="region" d="M80 70 L120 42 190 48 224 80 202 112 164 118 145 150 112 140 90 112 60 105Z"/>
+   <path class="region" d="M205 155 L240 164 260 205 245 253 222 278 205 235 188 198Z"/>
+   <path class="region" d="M380 68 L430 46 495 54 526 85 500 111 460 107 442 132 410 119 390 94Z"/>
+   <path class="region" d="M430 130 L476 122 507 154 494 216 462 258 438 220 415 170Z"/>
+   <path class="region" d="M520 70 L580 52 655 65 690 93 672 123 622 120 600 146 558 126 530 105Z"/>
+   <path class="region" d="M680 160 L720 145 765 161 788 190 760 212 718 205 694 184Z"/>
+   <path class="region" d="M770 230 L805 221 824 242 803 261 777 255Z"/>
+   <path class="hot" d="M485 103 L497 99 502 111 492 119Z"/>
+   <path class="hot" d="M449 112 L458 108 464 118 455 126Z"/>
+   <path class="hot" d="M520 112 L531 107 538 116 529 125Z"/>
+   <path class="hot" d="M716 173 L729 168 737 180 726 188Z"/>
+   <path class="hot" d="M600 98 L611 94 617 104 608 111Z"/>
+   <path class="hot" d="M155 105 L166 100 173 110 163 117Z"/>
+   <text class="maplabel" x="35" y="25">АМЕРИКА</text><text class="maplabel" x="390" y="25">ЕВРОПА</text>
+   <text class="maplabel" x="570" y="35">АЗИЯ</text><text class="maplabel" x="430" y="286">АФРИКА</text>
+   <text class="maplabel" x="740" y="140">ТИХИЙ</text><text class="maplabel" x="740" y="155">ОКЕАН</text>
+  </svg>
+  <p class="small">Схематическая иллюстрация: выделение условное и не является юридической картой границ.</p>
+ </div>
+ <div class="notes"><p class="small">10 слайдов · с пояснениями для выступления</p></div>
+</section>
+
+<section class="slide">
+ <div class="kicker">01 / Введение</div><h2>Почему проблема актуальна?</h2>
+ <p class="lead">В мире, где международное право защищает территориальную целостность государств, существуют территории, которые десятилетиями управляются отдельно от признанного центрального правительства.</p>
+ <div class="grid" style="margin-top:22px">
+  <div class="card"><h3><span class="num">1</span>Правовой парадокс</h3><p>Право народов на самоопределение сталкивается с принципом территориальной целостности и нерушимости границ.</p></div>
+  <div class="card"><h3><span class="num">2</span>Политическая реальность</h3><p>Фактические органы власти, армия, полиция и администрация могут существовать без широкого международного признания.</p></div>
+  <div class="card"><h3><span class="num">3</span>Международная безопасность</h3><p>Такие территории влияют на региональные конфликты, отношения великих держав, миграцию и гуманитарную ситуацию.</p></div>
+  <div class="card"><h3><span class="num">4</span>Нет универсального решения</h3><p>Переговоры, реинтеграция, признание или длительный статус-кво — разные исходы одного типа конфликтов.</p></div>
+ </div>
+ <div class="callout"><p>Ключевой парадокс: фактическая самостоятельность территории не означает автоматического признания её независимости.</p></div>
+ <details><summary>Заметки докладчика</summary><p>Актуальность темы объясняется расхождением между юридическими нормами и политической реальностью. Население территории может стремиться к независимости, тогда как центральное правительство считает её частью своего государства. Международное сообщество обычно стремится не поощрять одностороннее изменение границ, но одновременно должно учитывать самоопределение и права населения. Поэтому такие конфликты могут сохраняться десятилетиями.</p></details>
+</section>
+
+<section class="slide">
+ <div class="kicker">02 / Теория</div><h2>Что такое непризнанное государство?</h2>
+ <p class="lead">Политическое образование, претендующее на независимость и обладающее значительной фактической самостоятельностью, но не получившее широкого международного признания.</p>
+ <div class="grid" style="margin-top:20px">
+  <div class="card"><h3>De facto</h3><p><b>Фактически:</b> территория, население, действующие органы управления, контроль над значительной частью территории.</p></div>
+  <div class="card"><h3>De jure</h3><p><b>Юридически:</b> признание независимости другими государствами и возможность полноценно участвовать в международных отношениях.</p></div>
+ </div>
+ <h3 style="margin-top:24px">Критерии государственности — Конвенция Монтевидео, 1933</h3>
+ <div class="grid three">
+  <div class="card"><h3><span class="num">1</span>Население</h3><p>Постоянное население.</p></div>
+  <div class="card"><h3><span class="num">2</span>Территория</h3><p>Определённая территория.</p></div>
+  <div class="card"><h3><span class="num">3</span>Правительство</h3><p>Организованная публичная власть.</p></div>
+  <div class="card" style="grid-column:1/-1"><h3><span class="num">4</span>Внешние отношения</h3><p>Способность вступать в отношения с другими государствами. Наличие армии само по себе не является отдельным обязательным критерием.</p></div>
+ </div>
+ <details><summary>Заметки докладчика</summary><p>Статья 1 Конвенции Монтевидео перечисляет четыре классических критерия государственности: постоянное население, определённая территория, правительство и способность вступать в отношения с другими государствами. Статья 3 указывает, что политическое существование государства не зависит от признания другими государствами. При этом ООН не является органом, который универсально «признаёт» государства: признание осуществляется отдельными государствами, а членство в ООН — отдельная процедура.</p></details>
+</section>
+
+<section class="slide">
+ <div class="kicker">03 / Международное право</div><h2>Две теории признания</h2>
+ <div class="grid" style="margin-top:10px">
+  <div class="card" style="border-top:5px solid #c49a55">
+   <h3>Декларативная теория</h3>
+   <p>Государство существует, если отвечает объективным критериям государственности. Признание других стран подтверждает уже существующий факт, но не создаёт его.</p>
+   <div class="callout"><p>Признание — подтверждение статуса.</p></div>
+  </div>
+  <div class="card" style="border-top:5px solid #1d3c5b">
+   <h3>Конститутивная теория</h3>
+   <p>Международное признание играет ключевую роль в приобретении полноценной международной правосубъектности и участии в международных отношениях.</p>
+   <div class="callout"><p>Признание — условие полноценного статуса.</p></div>
+  </div>
+ </div>
+ <div class="card" style="margin-top:20px">
+  <h3>Практический вывод</h3>
+  <p>Современная практика сочетает элементы обеих теорий: фактическая государственность может существовать без признания, но дипломатические, экономические и юридические возможности такого образования остаются ограниченными.</p>
+ </div>
+ <details><summary>Заметки докладчика</summary><p>Декларативная теория опирается на объективные признаки государственности и статью 3 Конвенции Монтевидео. Конститутивная теория подчёркивает, что без признания сложно участвовать в международной системе. На практике эти подходы не существуют в чистом виде. Например, Тайвань обладает развитой системой самостоятельного управления, но его дипломатическое признание ограничено. Приднестровье имеет собственные органы власти, но не признано государствами — членами ООН.</p></details>
+</section>
+
+<section class="slide">
+ <div class="kicker">04 / Типология</div><h2>Критерии классификации</h2>
+ <div class="grid">
+  <div class="card">
+   <h3>По степени признания</h3>
+   <ul>
+    <li><b>Частично признанные:</b> Косово, Абхазия, Южная Осетия.</li>
+    <li><b>Ограниченное дипломатическое признание:</b> Тайвань.</li>
+    <li><b>Не признанные государствами — членами ООН:</b> Приднестровье.</li>
+   </ul>
+   <p class="small" style="margin-top:12px">Палестина имеет статус государства-наблюдателя при ООН и широкое международное признание; её положение требует отдельного рассмотрения.</p>
+  </div>
+  <div class="card">
+   <h3>По происхождению</h3>
+   <ul>
+    <li>Распад империй и федераций.</li>
+    <li>Гражданские войны и сепаратистские движения.</li>
+    <li>Межэтнические и территориальные конфликты.</li>
+    <li>Последствия внешнего вмешательства.</li>
+   </ul>
+  </div>
+ </div>
+ <div class="callout"><p>Важно: «непризнанное государство» — аналитическое обозначение, а не единая официальная юридическая категория.</p></div>
+ <details><summary>Заметки докладчика</summary><p>Классификация зависит от того, что именно измеряется: число признающих государств, фактический контроль над территорией, степень внешней поддержки или международное участие. Тайвань и Палестина отличаются от классических непризнанных образований: у них особая история и международное положение. Также важно не смешивать политическое образование, частично признанное государство и территорию с автономным самоуправлением.</p></details>
+</section>
+
+<section class="slide">
+ <div class="kicker">05 / География</div><h2>География современных де-факто образований</h2>
+ <div class="grid" style="margin-top:4px">
+  <div class="card"><h3>Постсоветское пространство</h3><p><b>Приднестровье</b> — де-факто отдельная администрация с 1990-х годов.<br><b>Абхазия и Южная Осетия</b> — частично признаны, большинство государств считает их частью Грузии.</p></div>
+  <div class="card"><h3>Европа</h3><p><b>Косово</b> — провозгласило независимость в 2008 году, признано рядом государств.<br><b>Северный Кипр</b> — признаётся только Турцией.</p></div>
+  <div class="card"><h3>Азия</h3><p><b>Тайвань</b> — самостоятельное управление, ограниченное официальное дипломатическое признание, развитые международные экономические связи.</p></div>
+  <div class="card"><h3>Африка</h3><p><b>Сомалиленд</b> — провозгласил независимость в 1991 году; Израиль признал его в декабре 2025 года, но большинство государств продолжает поддерживать территориальную целостность Сомали.</p></div>
+ </div>
+ <p class="source">Статус территорий различается; перечисление не означает, что все они имеют одинаковый международно-правовой статус.</p>
+ <details><summary>Заметки докладчика</summary><p>Постсоветские примеры связаны с распадом СССР и вооружёнными конфликтами начала 1990-х годов. Косово возникло в контексте распада Югославии и конфликта вокруг статуса края. Северный Кипр связан с разделением острова и конфликтом между общинами. Тайвань имеет особую историю после 1949 года и обладает значительной фактической самостоятельностью. Сомалиленд восстановил отдельное управление после распада центральной власти в Сомали. Его международное положение изменилось после признания Израилем в декабре 2025 года.</p></details>
+</section>
+
+<section class="slide">
+ <div class="kicker">06 / Внутренняя устойчивость</div><h2>Как они выживают?</h2>
+ <div class="grid three">
+  <div class="card"><h3><span class="num">1</span>Экономика</h3><ul><li>Налоговая система и внутренний рынок.</li><li>Торговля через соседние страны и посредников.</li><li>Собственная или используемая валюта.</li><li>Внешняя помощь и денежные переводы.</li></ul></div>
+  <div class="card"><h3><span class="num">2</span>Политика</h3><ul><li>Органы законодательной и исполнительной власти.</li><li>Суды и административные учреждения.</li><li>Выборы и местные политические институты.</li><li>Силовые структуры.</li></ul></div>
+  <div class="card"><h3><span class="num">3</span>Общество</h3><ul><li>Региональная и политическая идентичность.</li><li>Собственные символы и образовательные институты.</li><li>Культурная политика и коллективная память.</li><li>Смена поколений.</li></ul></div>
+ </div>
+ <div class="callout"><p>Со временем временная политическая конструкция может превратиться в устойчивую социальную реальность.</p></div>
+ <details><summary>Заметки докладчика</summary><p>Экономическое выживание обеспечивается сочетанием внутреннего регулирования и внешних связей. Например, Приднестровье использует собственную валюту, но её обращение ограничено. Торговля часто проходит через признанные юрисдикции. Политические институты помогают администрации управлять повседневной жизнью и поддерживать внутреннюю легитимность. Социальная идентичность формируется через образование, язык, символику, память о конфликте и опыт нескольких поколений. Однако внутренние институты не устраняют зависимости от внешней поддержки.</p></details>
+</section>
+
+<section class="slide">
+ <div class="kicker">07 / Внешняя политика</div><h2>Внешние факторы: государство-патрон</h2>
+ <p class="lead">Государство-патрон — внешний актор, который предоставляет политическую, экономическую, дипломатическую или военную поддержку де-факто образованию.</p>
+ <div class="grid" style="margin-top:18px">
+  <div class="card"><h3>Формы поддержки</h3><ul><li>Военная и силовая поддержка.</li><li>Финансовая помощь и энергоресурсы.</li><li>Дипломатическое лоббирование.</li><li>Институциональная и инфраструктурная помощь.</li></ul></div>
+  <div class="card"><h3>Примеры</h3><ul><li><b>Турция — Северный Кипр:</b> ключевая политическая, экономическая и военная поддержка.</li><li><b>Россия — Абхазия и Южная Осетия:</b> признание и комплексная поддержка.</li><li><b>Россия — Приднестровье:</b> поддержка без официального признания независимости.</li></ul></div>
+ </div>
+ <div class="card" style="margin-top:18px">
+  <h3>Дипломатические альтернативы: пример Тайваня</h3>
+  <p>Торговые и культурные представительства, неофициальные дипломатические каналы, научные и технологические соглашения позволяют поддерживать международные контакты без формальных дипломатических отношений.</p>
+ </div>
+ <div class="callout"><p>Внешняя поддержка повышает устойчивость, но одновременно может ограничивать самостоятельность внешней политики.</p></div>
+ <details><summary>Заметки докладчика</summary><p>Государство-патрон помогает компенсировать нехватку международных ресурсов и гарантий безопасности. Однако интересы патрона не всегда совпадают с интересами местного населения и руководства. Поддержка может давать политическому образованию пространство для манёвра, но одновременно формировать зависимость. Важно различать поддержку и юридическое признание: пример Приднестровья показывает, что государство может оказывать помощь, не признавая независимость территории.</p></details>
+</section>
+
+<section class="slide">
+ <div class="kicker">08 / Гуманитарное измерение</div><h2>Проблемы и вызовы для населения</h2>
+ <div class="grid">
+  <div class="card"><h3>Правовые ограничения</h3><ul><li>Паспорта могут не признаваться за рубежом.</li><li>Сложности с визами и пересечением границ.</li><li>Признание дипломов и актов гражданского состояния.</li><li>Регистрация компаний и имущественных прав.</li></ul></div>
+  <div class="card"><h3>Экономические трудности</h3><ul><li>Ограниченный доступ к банковским услугам.</li><li>Сложности с инвестициями и кредитованием.</li><li>Дополнительные расходы на международные операции.</li><li>Зависимость от соседних экономик.</li></ul></div>
+  <div class="card"><h3>Гуманитарные риски</h3><ul><li>Ограниченный доступ к некоторым международным программам.</li><li>Риски нарушений прав человека.</li><li>Трудности с медицинской помощью и перемещением.</li><li>Уязвимость во время вооружённых конфликтов.</li></ul></div>
+  <div class="card"><h3>Важное уточнение</h3><p>Непризнанность не отменяет права человека и действие применимых норм международного гуманитарного права. Помощь может предоставляться через международные организации и признанные государства.</p></div>
+ </div>
+ <details><summary>Заметки докладчика</summary><p>Повседневные последствия статуса особенно заметны для обычных жителей. Документы де-факто администрации могут не приниматься другими государствами, поэтому люди часто используют документы признанного государства, частью которого международное сообщество считает территорию. Экономические ограничения затрудняют банковские операции и инвестиции. При этом нельзя утверждать, что международные организации полностью не работают на таких территориях: гуманитарные программы могут осуществляться через признанные государства, специальные механизмы и неправительственные организации. Непризнанность не лишает население базовых прав.</p></details>
+</section>
+
+<section class="slide">
+ <div class="kicker">09 / Исторические исходы</div><h2>Чем заканчивается существование непризнанных образований?</h2>
+ <div class="timeline">
+  <div class="step"><strong>01 · Реинтеграция или утрата контроля</strong><p><b>Биафра</b> — поражение в гражданской войне, 1970.<br><b>Чеченская Республика Ичкерия</b> — утрата фактической независимости.<br><b>Нагорный Карабах</b> — переход под контроль Азербайджана в 2023 году.</p></div>
+  <div class="step"><strong>02 · Международное признание</strong><p><b>Эритрея</b> — независимость в 1993 году.<br><b>Восточный Тимор</b> — независимость в 2002 году.<br><b>Южный Судан</b> — независимость в 2011 году.</p></div>
+  <div class="step"><strong>03 · Длительный статус-кво</strong><p><b>Приднестровье</b> — нерешённый статус с 1990-х годов.<br><b>Северный Кипр</b> — ограниченное признание.<br><b>Абхазия и Южная Осетия</b> — продолжающийся спор о статусе.</p></div>
+ </div>
+ <div class="callout"><p>Универсального сценария нет: исход зависит от баланса сил, переговоров, внешней поддержки и международной обстановки.</p></div>
+ <details><summary>Заметки докладчика</summary><p>Первый сценарий — поражение сепаратистского проекта и восстановление контроля центрального правительства. Второй — согласованный или поддержанный международным сообществом путь к независимости. Эритрея, Восточный Тимор и Южный Судан стали членами ООН после обретения независимости. Третий сценарий — длительное сохранение неопределённого статуса, когда стороны не достигают соглашения, а де-факто институты продолжают работать. Нагорный Карабах следует описывать осторожно: после операции Азербайджана в сентябре 2023 года регион перешёл под его контроль, а большая часть армянского населения выехала в Армению.</p></details>
+</section>
+
+<section class="slide dark">
+ <div class="kicker">10 / Итоги</div><h2>Заключение</h2>
+ <p class="quote">Непризнанные государства — не просто исключение из международной системы, а устойчивое проявление разрыва между политической реальностью и юридическим статусом.</p>
+ <div class="rule"></div>
+ <div class="grid">
+  <div class="card"><h3>Фактическая власть ≠ признание</h3><p>Наличие территории, населения и институтов не гарантирует международно-правового признания.</p></div>
+  <div class="card"><h3>Право и политика взаимосвязаны</h3><p>Решения о признании зависят не только от юридических аргументов, но и от интересов государств.</p></div>
+  <div class="card"><h3>Патронаж имеет двойственный эффект</h3><p>Внешняя поддержка помогает выживать, но может создавать зависимость.</p></div>
+  <div class="card"><h3>Население — главный гуманитарный вопрос</h3><p>Даже при спорном статусе необходимо обеспечивать права, безопасность и доступ к помощи.</p></div>
+ </div>
+ <div class="callout"><p>Практическая задача международного сообщества — искать форматы взаимодействия без предварительного решения вопроса о статусе, чтобы снижать гуманитарные риски.</p></div>
+ <p class="small" style="margin-top:24px">Спасибо за внимание</p>
+ <details><summary>Заметки докладчика</summary><p>Непризнанные государства демонстрируют, что международная система не сводится к формальным юридическим категориям. Их существование связано с историей конфликтов, самоопределением, территориальной целостностью и интересами внешних держав. Для урегулирования необходимы переговоры, посредничество и практическое взаимодействие по гуманитарным и социальным вопросам. Даже если политический статус остаётся нерешённым, население не должно лишаться базовых прав и защиты.</p></details>
+</section>
+
+<section class="slide">
+ <div class="kicker">Материалы для подготовки</div><h2>Источники и литература</h2>
+ <div class="card">
+  <ol style="padding-left:22px;margin:0">
+   <li>Montevideo Convention on the Rights and Duties of States (1933), статьи 1–3.</li>
+   <li>Устав Организации Объединённых Наций, статьи 4 и 2.</li>
+   <li>International Court of Justice. <i>Accordance with International Law of the Unilateral Declaration of Independence in Respect of Kosovo</i> (Advisory Opinion, 2010).</li>
+   <li>UN Security Council Resolution 541 (1983), Cyprus.</li>
+   <li>UN Security Council Resolution 550 (1984), Cyprus.</li>
+   <li>United Nations: Member States and Non-Member States — материалы о членстве и статусе наблюдателей.</li>
+   <li>Материалы ООН и международных организаций по Эритрее, Восточному Тимору, Южному Судану и Нагорному Карабаху.</li>
+  </ol>
+ </div>
+ <p class="source">Перед академической сдачей рекомендуется сверить актуальный статус территорий и даты признания по официальным источникам.</p>
+</section>
+
+</div>
+<div class="footer"><span id="sectionName">Титульный слайд</span><div class="progress"><span id="bar"></span></div><span id="footCount">1 / 11</span></div>
+<div class="controls">
+ <button id="prev" aria-label="Предыдущий слайд" title="Предыдущий (←)">‹</button>
+ <div class="counter" id="counter">1 / 11</div>
+ <button id="next" aria-label="Следующий слайд" title="Следующий (→)">›</button>
+</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const names=['Титульный слайд','Введение и актуальность','Определение и критерии','Теории признания','Классификация','География','Внутренние механизмы','Внешние факторы','Проблемы населения','Исторические сценарии','Заключение','Источники'];
+let current=0;
+function show(n){
+ current=Math.max(0,Math.min(slides.length-1,n));
+ slides.forEach((s,i)=>s.classList.toggle('active',i===current));
+ const label=names[current]||'Слайд';
+ document.getElementById('counter').textContent=(current+1)+' / '+slides.length;
+ document.getElementById('footCount').textContent=(current+1)+' / '+slides.length;
+ document.getElementById('sectionName').textContent=label;
+ document.getElementById('bar').style.width=((current+1)/slides.length*100)+'%';
+ document.getElementById('prev').disabled=current===0;
+ document.getElementById('next').disabled=current===slides.length-1;
+}
+document.getElementById('prev').addEventListener('click',()=>show(current-1));
+document.getElementById('next').addEventListener('click',()=>show(current+1));
+document.addEventListener('keydown',e=>{
+ if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(current+1)}
+ if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(current-1)}
+ if(e.key==='Home')show(0);
+ if(e.key==='End')show(slides.length-1);
+});
+let touchX=null;
+document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX},{passive:true});
+document.addEventListener('touchend',e=>{
+ if(touchX===null)return;
+ const dx=e.changedTouches[0].screenX-touchX;
+ if(Math.abs(dx)>55)show(current+(dx<0?1:-1));
+ touchX=null;
+},{passive:true});
+show(0);
+</script>
+</body>
+</html>
